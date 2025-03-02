@@ -30,3 +30,21 @@ app.get("/api/hello", function (req, res) {
 var listener = app.listen(process.env.PORT || 3000, function () {
   console.log('Your app is listening on port ' + listener.address().port);
 });
+
+app.get("/api/:date?", function(req, res){
+  const dateString = req.params.date;
+  let date;
+
+  if (dateString){
+    date = new Date(dateString);
+    if(isNaN(date.getTime())){
+      return res.status(400).send({ error: "Invaild Date" });
+    }
+  } else {
+    date = new Date();
+  }
+
+  res.json({
+    unix: date.getTime()
+  });
+})
