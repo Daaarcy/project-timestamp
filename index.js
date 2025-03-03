@@ -33,15 +33,19 @@ var listener = app.listen(process.env.PORT || 3000, function () {
 
 //input date in milliseconds, format and Unix timestamp handling
 app.get("/api/:date?", function(req, res){
-  const dateString = req.params.date;
+  let dateString = req.params.date;
   let date;
 
 
-  if (dateString) {
-      date = new Date(dateString);
-    } else {
+  if (!dateString) {
       date = new Date();
-    }
+    } else {
+      if (!isNaN(Number(dateString))){
+        date = new Date(Number(dateString))
+      } else {
+        date = new Date(dateString);
+      }
+    };
 
 if(isNaN(date.getTime())){
       return res.json({ error : "Invalid Date" });
